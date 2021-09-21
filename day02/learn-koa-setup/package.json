@@ -1,0 +1,19 @@
+{
+  "name": "koa-setup",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "learn-koa-setup": "./index.js"
+  },
+  "scripts": {
+    "colin": "rm -rf ./ccc && node index.js"
+  },
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "execa": "^5.1.1",
+    "inquirer": "^8.1.5",
+    "prettier": "^2.4.1"
+  }
+}
