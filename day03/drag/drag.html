@@ -1,0 +1,25 @@
+<div
+  id="dragable"
+  style="
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border: 1px solid green;
+  "
+></div>
+<script>
+  function enableDrag(element) {
+    let x0, y0;
+    element.addEventListener("mousedown", (e) => {
+      [x0, y0] = [e.clientX, e.clientY];
+      console.log(x0, y0);
+    });
+    element.addEventListener("mousemove", (e) => {
+      let [dx, dy] = [e.clentX - x0, e.clentY - y0];
+      console.log(dx, dy);
+      element.style.top = dy + "px";
+      element.style.left = dx + "px";
+    });
+  }
+  enableDrag(document.getElementById("dragable"));
+</script>
