@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #box {
+        height: 200px;
+        height: 200px;
+        background-color: rebeccapurple;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="box"></div>
+    <script>
+      /*
+        changedTouches 触发当前事件的手指列表
+        targetTouches 当前元素上的手指列表
+        touches 当前屏幕中的手指列表
+        */
+      let box = document.getElementById("box");
+      box.addEventListener("touchstart", (e) => {
+        console.log(e);
+      });
+      box.addEventListener("touchmove", (e) => {
+        box.innerHTML = `
+        触发当前事件手指个数：${e.changedTouches.length}</br>
+        当前元素上手指个数：${e.targetTouches.length}</br>
+        当前屏幕上手指个数：${e.touches.length}</br>
+        `;
+      });
+      box.addEventListener("touchend", (e) => {
+        console.log(e);
+      });
+    </script>
+  </body>
+</html>

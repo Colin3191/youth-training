@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <meta name="viewport" />
+    <style>
+      #box {
+        width: 200px;
+        height: 200px;
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="box"></div>
+    <script>
+      let ele = document.getElementById("box");
+      ele.addEventListener("touchstart", () => {
+        console.log("start");
+      });
+      ele.addEventListener("touchmove", () => {
+        console.log("move");
+      });
+      ele.addEventListener("touchend", () => {
+        console.log("end");
+      });
+    </script>
+  </body>
+</html>
