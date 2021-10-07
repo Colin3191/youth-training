@@ -1,52 +1,68 @@
 <div id="app">{{title}}</div>
 <script>
   const Vue = {
-    createApp(options) {
+    // 扩展性
+    createRenderer({ querySelector, insert }) {
       return {
-        mount(selector) {
-          console.log("mount this", this);
-          // 1. 找到宿主元素
-          const parent = document.querySelector(selector);
-          // 2. 渲染页面
-          if (!options.render) {
-            options.render = this.compile(parent.innerHTML);
-          }
-          if (options.setup) {
-            this.setupState = options.setup();
-          }
-          if (options.data) {
-            this.data = options.data();
-          }
-          // 兼容setup和data
-          const proxy = new Proxy(this, {
-            get(target, key) {
-              if (target.setupState && key in target.setupState) {
-                return target.setupState[key];
-              } else {
-                return target.data[key];
+        createApp(options) {
+          return {
+            mount(selector) {
+              // 1. 找到宿主元素
+              const parent = querySelector(selector);
+              // 2. 渲染页面
+              if (!options.render) {
+                options.render = this.compile(parent.innerHTML);
               }
-            },
-            set(target, key, value) {
-              if (target.setupState && key in target.setupState) {
-                target.setupState[key] = val;
-              } else {
-                target.data[key] = val;
+              if (options.setup) {
+                this.setupState = options.setup();
               }
+              if (options.data) {
+                this.data = options.data();
+              }
+              // 兼容setup和data
+              const proxy = new Proxy(this, {
+                get(target, key) {
+                  if (target.setupState && key in target.setupState) {
+                    return target.setupState[key];
+                  } else {
+                    return target.data[key];
+                  }
+                },
+                set(target, key, value) {
+                  if (target.setupState && key in target.setupState) {
+                    target.setupState[key] = val;
+                  } else {
+                    target.data[key] = val;
+                  }
+                },
+              });
+              const el = options.render.call(proxy);
+              // 3.追加到宿主元素
+              insert(el, parent);
             },
-          });
-          const el = options.render.call(proxy);
-          // 3.追加到宿主元素
-          parent.innerHTML = "";
-          parent.appendChild(el);
-        },
-        compile(template) {
-          return function render() {
-            const h3 = document.createElement("h3");
-            h3.innerText = this.title;
-            return h3;
+            compile(template) {
+              return function render() {
+                const h3 = document.createElement("h3");
+                h3.innerText = this.title;
+                return h3;
+              };
+            },
           };
         },
       };
+    },
+    // 创建一个web平台特有的渲染器
+    createApp(options) {
+      const querySelector = (selector) => document.querySelector(selector);
+      const insert = (el, parent) => {
+        parent.innerHTML = "";
+        parent.appendChild(el);
+      };
+      const renderer = this.createRenderer({
+        querySelector,
+        insert,
+      });
+      return renderer.createApp(options);
     },
   };
 </script>
